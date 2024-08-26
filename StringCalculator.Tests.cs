@@ -1,24 +1,23 @@
 using System;
-using System.Collections.Generic;
 using Xunit;
 
-public class StringCalculatorTests
+public class StringCalculatorAddTests
 {
     [Fact]
-    public void Add_ShouldReturnZero_WhenInputIsEmpty()
+    public void ShouldReturnZero_ForEmptyString()
     {
         // Arrange
         var calculator = new StringCalculator();
 
         // Act
-        var result = calculator.Add(string.Empty);
+        var result = calculator.Add("");
 
         // Assert
         Assert.Equal(0, result);
     }
 
     [Fact]
-    public void Add_ShouldReturnZero_WhenInputIsSingleZero()
+    public void ShouldReturnZero_ForSingleZeroInput()
     {
         // Arrange
         var calculator = new StringCalculator();
@@ -31,7 +30,7 @@ public class StringCalculatorTests
     }
 
     [Fact]
-    public void Add_ShouldReturnSum_WhenTwoNumbersProvided()
+    public void ShouldReturnSum_ForTwoCommaSeparatedNumbers()
     {
         // Arrange
         var calculator = new StringCalculator();
@@ -44,18 +43,18 @@ public class StringCalculatorTests
     }
 
     [Fact]
-    public void Add_ShouldThrowException_WhenNegativeNumbersProvided()
+    public void ShouldThrowException_ForNegativeNumbers()
     {
         // Arrange
         var calculator = new StringCalculator();
 
         // Act & Assert
-        var exception = Assert.Throws<Exception>(() => calculator.Add("-1,2"));
-        Assert.Contains("Negatives not allowed", exception.Message);
+        var ex = Assert.Throws<Exception>(() => calculator.Add("-1,2"));
+        Assert.Contains("Negatives not allowed", ex.Message);
     }
 
     [Fact]
-    public void Add_ShouldReturnSum_WhenNewlineDelimiterUsed()
+    public void ShouldReturnSum_ForNumbersWithNewlineDelimiter()
     {
         // Arrange
         var calculator = new StringCalculator();
@@ -68,7 +67,7 @@ public class StringCalculatorTests
     }
 
     [Fact]
-    public void Add_ShouldIgnoreNumbersGreaterThan1000()
+    public void ShouldIgnoreNumbersGreaterThan1000()
     {
         // Arrange
         var calculator = new StringCalculator();
@@ -81,7 +80,7 @@ public class StringCalculatorTests
     }
 
     [Fact]
-    public void Add_ShouldReturnSum_WhenCustomDelimiterUsed()
+    public void ShouldHandleCustomDelimiter_ForInputString()
     {
         // Arrange
         var calculator = new StringCalculator();
