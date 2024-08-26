@@ -2,83 +2,94 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-
-public class StringCalculatorAddTests
+public class StringCalculatorTests
 {
     [Fact]
-    public void ExpectZeroForEmptyInput()
+    public void Add_ShouldReturnZero_WhenInputIsEmpty()
     {
-        int expectedResult = 0;
-        string input = "";
-        StringCalculator objUnderTest = new StringCalculator();
-        int result = objUnderTest.Add(input);
+        // Arrange
+        var calculator = new StringCalculator();
 
-       Assert.Equal(expectedResult, result);
-    }
+        // Act
+        var result = calculator.Add(string.Empty);
 
-  [Fact]
-    public void ExpectZeroForSingleZero()
-    {
-        int expectedResult = 0;
-        string input = "0";
-        StringCalculator objUnderTest = new StringCalculator();
-        int result = objUnderTest.Add(input);
-
-        Assert.Equal(expectedResult, result);
-    }
-
-  [Fact]
-    public void ExpectSumForTwoNumbers()
-    {
-        int expectedResult = 3;
-        string input = "1,2";
-        StringCalculator objUnderTest = new StringCalculator();
-        int result = objUnderTest.Add(input);
-
-       Assert.Equal(expectedResult, result);
+        // Assert
+        Assert.Equal(0, result);
     }
 
     [Fact]
-    public void ExpectExceptionForNegativeNumbers()
+    public void Add_ShouldReturnZero_WhenInputIsSingleZero()
     {
-        Assert.Throws<Exception>(() =>
-        {
-            string input = "-1,2";
-            StringCalculator objUnderTest = new StringCalculator();
-            objUnderTest.Add(input);
-        });
-    }
+        // Arrange
+        var calculator = new StringCalculator();
 
-  [Fact]
-    public void ExpectSumWithNewlineDelimiter()
-    {
-        int expectedResult = 6;
-        string input = "1\n2,3";
-        StringCalculator objUnderTest = new StringCalculator();
-        int result = objUnderTest.Add(input);
+        // Act
+        var result = calculator.Add("0");
 
-       Assert.Equal(expectedResult, result);
-    }
-
-  [Fact]
-    public void IgnoreNumbersGreaterThan1000()
-    {
-        int expectedResult = 1;
-        string input = "1,1001";
-        StringCalculator objUnderTest = new StringCalculator();
-        int result = objUnderTest.Add(input);
-
-       Assert.Equal(expectedResult, result);
+        // Assert
+        Assert.Equal(0, result);
     }
 
     [Fact]
-    public void ExpectSumWithCustomDelimiter()
+    public void Add_ShouldReturnSum_WhenTwoNumbersProvided()
     {
-        int expectedResult = 3;
-        string input = "//;\n1;2";
-        StringCalculator objUnderTest = new StringCalculator();
-        int result = objUnderTest.Add(input);
+        // Arrange
+        var calculator = new StringCalculator();
 
-       Assert.Equal(expectedResult, result);
+        // Act
+        var result = calculator.Add("1,2");
+
+        // Assert
+        Assert.Equal(3, result);
+    }
+
+    [Fact]
+    public void Add_ShouldThrowException_WhenNegativeNumbersProvided()
+    {
+        // Arrange
+        var calculator = new StringCalculator();
+
+        // Act & Assert
+        var exception = Assert.Throws<Exception>(() => calculator.Add("-1,2"));
+        Assert.Contains("Negatives not allowed", exception.Message);
+    }
+
+    [Fact]
+    public void Add_ShouldReturnSum_WhenNewlineDelimiterUsed()
+    {
+        // Arrange
+        var calculator = new StringCalculator();
+
+        // Act
+        var result = calculator.Add("1\n2,3");
+
+        // Assert
+        Assert.Equal(6, result);
+    }
+
+    [Fact]
+    public void Add_ShouldIgnoreNumbersGreaterThan1000()
+    {
+        // Arrange
+        var calculator = new StringCalculator();
+
+        // Act
+        var result = calculator.Add("1,1001");
+
+        // Assert
+        Assert.Equal(1, result);
+    }
+
+    [Fact]
+    public void Add_ShouldReturnSum_WhenCustomDelimiterUsed()
+    {
+        // Arrange
+        var calculator = new StringCalculator();
+
+        // Act
+        var result = calculator.Add("//;\n1;2");
+
+        // Assert
+        Assert.Equal(3, result);
     }
 }
