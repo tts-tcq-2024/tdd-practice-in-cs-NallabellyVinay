@@ -1,52 +1,50 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 public class StringCalculator
 {
-    private const int MaxNumber = 1000;
+    private const int UpperLimit = 1000;
 
-    public int Add(string numbers)
+    public int Add(string input)
     {
-        if (string.IsNullOrEmpty(numbers))
-        {
+        if (string.IsNullOrWhiteSpace(input))
             return 0;
-        }
 
+        var delimiters = ExtractDelimiters(ref input);
+        var numbers = ParseNumbers(input, delimiters);
+
+        CheckForNegatives(numbers);
+
+        return numbers.Where(n => n <= UpperLimit).Sum();
+    }
+
+    private List<string> ExtractDelimiters(ref string input)
+    {
         var delimiters = new List<string> { ",", "\n" };
-        numbers = ProcessCustomDelimiter(numbers, delimiters);
 
-        var splitNumbers = SplitNumbers(numbers, delimiters);
-        ValidateNumbers(splitNumbers);
-
-        return splitNumbers.Where(n => n <= MaxNumber).Sum();
-    }
-
-    private string ProcessCustomDelimiter(string numbers, List<string> delimiters)
-    {
-        if (numbers.StartsWith("//"))
+        if (input.StartsWith("//"))
         {
-            var delimiterEndIndex = numbers.IndexOf('\n');
-            var customDelimiter = numbers.Substring(2, delimiterEndIndex - 2);
+            var delimiterEnd = input.IndexOf('\n');
+            var customDelimiter = input.Substring(2, delimiterEnd - 2);
             delimiters.Add(customDelimiter);
-            numbers = numbers.Substring(delimiterEndIndex + 1);
+            input = input.Substring(delimiterEnd + 1);
         }
 
-        return numbers;
+        return delimiters;
     }
 
-    private int[] SplitNumbers(string numbers, List<string> delimiters)
+    private int[] ParseNumbers(string input, List<string> delimiters)
     {
-        return numbers.Split(delimiters.ToArray(), StringSplitOptions.None)
-                      .Select(int.Parse)
-                      .ToArray();
+        return input.Split(delimiters.ToArray(), StringSplitOptions.None)
+                    .Select(int.Parse)
+                    .ToArray();
     }
 
-    private void ValidateNumbers(int[] numbers)
+    private void CheckForNegatives(int[] numbers)
     {
-        var negativeNumbers = numbers.Where(n => n < 0).ToArray();
-        if (negativeNumbers.Any())
-        {
-            throw new Exception("Negatives not allowed: " + string.Join(", ", negativeNumbers));
-        }
+        var negatives = numbers.Where(n => n < 0).ToArray();
+        if (negatives.Any())
+            throw new Exception("Negative numbers not allowed: " + string.Join(", ", negatives));
     }
 }
